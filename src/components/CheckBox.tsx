@@ -1,16 +1,21 @@
 import React from 'react';
+import prefectures from '@/pages/index';
 
-type Props = {
-  prefecture: {
+interface Props {
+  prefectures: {
     prefCode: number;
     prefName: string;
-  };
-};
+  }[];
+}
 
-const CheckBox: React.FC<Props> = (props) => {
+const CheckBox: React.FC<Props> = ({ prefectures }) => {
   return (
     <div>
-      <input type='checkbox'>{props.prefecture.prefName}</input>
+      {prefectures.map((prefecture) => (
+            <div key={prefecture.prefCode}>
+              <input type = "checkbox"></input>
+            </div>
+          ))}
     </div>
   );
 };
