@@ -6,6 +6,7 @@ interface Props {
     prefCode: number;
     prefName: string;
   }[];
+  
 }
 
 const CheckBox: React.FC<Props> = ({ prefectures }) => {
@@ -14,6 +15,7 @@ const CheckBox: React.FC<Props> = ({ prefectures }) => {
       {prefectures.map((prefecture) => (
             <div key={prefecture.prefCode}>
               <input type = "checkbox"></input>
+              <label>{prefecture.prefName}</label>
             </div>
           ))}
     </div>
