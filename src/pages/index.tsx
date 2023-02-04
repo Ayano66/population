@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import CheckBox from '@/components/CheckBox';
+import axios from 'axios';
 
 const prefectures = [
   {
@@ -195,10 +196,39 @@ const prefectures = [
   },
 ];
 
+const handler = (
+  prefName: string, 
+  prefCode:number, 
+  check: boolean
+) => {
+  
+  if(check) {
+    axios
+    .get(
+      "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=" +
+      String(prefCode),
+    {
+      headers: { "X-API-KEY": process.env.MY_APP_API_KEY},
+    }
+    )
+    console.log(prefCode + prefName)
+  }
+  else {
+    console.log("キャンセル" + prefCode + prefName)
+  }
+  
+}
+
+
 export default function Home() {
   return (
-    <div>
-      <CheckBox prefectures={prefectures}></CheckBox>
+    <div style={Body}>
+      <CheckBox prefectures={prefectures} onChange={handler}></CheckBox>
     </div>
   );
+
+  }
+
+const Body: React.CSSProperties = {
+  backgroundColor: "white"
 }
