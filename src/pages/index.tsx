@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import React, { useEffect } from 'react';
-import { GetServerSideProps } from 'next';
 import CheckBox from '@/components/CheckBox';
+import Graph from '@/components/Graph';
 import axios from 'axios';
+import Encoding from 'encoding-japanese';
 
 const prefectures = [
   {
@@ -196,39 +196,45 @@ const prefectures = [
   },
 ];
 
-const handler = (
-  prefName: string, 
-  prefCode:number, 
-  check: boolean
-) => {
+const handler = (prefName: string, prefCode: number, check: boolean) => {
   
-  if(check) {
+  if (check) {
+    
     axios
-    .get(
-      "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=" +
-      String(prefCode),
-    {
-      headers: { "X-API-KEY": process.env.MY_APP_API_KEY},
-    }
-    )
-    console.log(prefCode + prefName)
-  }
-  else {
-    console.log("キャンセル" + prefCode + prefName)
-  }
-  
-}
+      .get('https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=' + String(prefCode), {
+        headers: { 'X-API-KEY': "XpIkOhd50epNBliBNsaWA0Gu94G8gdauDHqSjbcE"},
+      })
+      .then((res) => {
+        // const fetchedData = res.data.result.data[0].data;
+        console.log("成功じゃ", res);
 
+       
+      })
+      .catch((error) => {
+        console.log('Errorじゃ');
+      });
+  } else {
+    console.log('キャンセル' + prefCode + prefName);
+  }
+};
+
+const graphData = {};
 
 export default function Home() {
   return (
-    <div style={Body}>
-      <CheckBox prefectures={prefectures} onChange={handler}></CheckBox>
-    </div>
+    <>
+      <div style={Body}>
+        <h1>都道府県</h1>
+        <CheckBox prefectures={prefectures} onChange={handler}></CheckBox>
+      </div>
+      <div>
+        <h2>人口推移グラフ</h2>
+        <Graph graphData={graphData}></Graph>
+      </div>
+    </>
   );
-
-  }
+}
 
 const Body: React.CSSProperties = {
-  backgroundColor: "white"
-}
+  backgroundColor: 'white',
+};
